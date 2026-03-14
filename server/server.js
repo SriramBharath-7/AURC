@@ -126,13 +126,11 @@ async function runCheck() {
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Status API consumed by the dashboard.
-app.get("/api/status", (req, res) => {
+// On Vercel, run one live check per request because serverless functions are not always-on.
+app.get("/api/status", async (req, res) => {
+  await runCheck();
   res.json(monitorState);
 });
-
-// Initial check and periodic checks every 10 seconds.
-runCheck();
-setInterval(runCheck, CHECK_INTERVAL_MS);
 
 /**
  * Start server with a small retry window when the preferred port is occupied.
@@ -155,4 +153,12 @@ function startServer(port, retriesLeft = MAX_PORT_RETRIES) {
   });
 }
 
-startServer(DEFAULT_PORT);
+// Export app for serverless runtimes (e.g., Vercel).
+module.exports = app;
+
+// Local runtime keeps the 10-second background monitor loop.
+if (!process.env.VERCEL) {
+  runCheck();
+  setInterval(runCheck, CHECK_INTERVAL_MS);
+  startServer(DEFAULT_PORT);
+}
