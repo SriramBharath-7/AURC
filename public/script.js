@@ -116,8 +116,10 @@ function updateUi(payload) {
   const hasAvg = Number.isFinite(payload.averageResponseMs);
   avgResponse.textContent = hasAvg ? `${payload.averageResponseMs} ms` : "N/A";
 
-  // Show quick links only when the target server is currently reachable.
-  resultLinks.classList.toggle("hidden", payload.status !== "UP");
+  // Guard against partial/cached HTML where this block may not exist yet.
+  if (resultLinks) {
+    resultLinks.classList.toggle("hidden", payload.status !== "UP");
+  }
 
   renderChecks(payload.checks || []);
 }
@@ -143,9 +145,10 @@ async function fetchStatus() {
 
     previousStatus = payload.status;
   } catch (error) {
+    console.error("Status fetch failed:", error);
     updateUi({
       status: "DOWN",
-      reason: `Could not reach monitor backend (${error.message})`,
+      reason: "Could not reach monitor backend",
       checkedAt: new Date().toISOString(),
       averageResponseMs: null,
       checks: MONITORED_URLS.map((url) => ({
@@ -158,23 +161,25 @@ async function fetchStatus() {
   }
 }
 
-notifyBtn.addEventListener("click", async () => {
-  notificationsEnabled = !notificationsEnabled;
+if (notifyBtn) {
+  notifyBtn.addEventListener("click", async () => {
+    notificationsEnabled = !notificationsEnabled;
 
-  if (notificationsEnabled && "Notification" in window && Notification.permission === "default") {
-    await Notification.requestPermission();
-  }
+    if (notificationsEnabled && "Notification" in window && Notification.permission === "default") {
+      await Notification.requestPermission();
+    }
 
-  if (notificationsEnabled && "Notification" in window && Notification.permission === "denied") {
-    notificationsEnabled = false;
-    alert("Notification permission is blocked in your browser settings.");
-  }
+    if (notificationsEnabled && "Notification" in window && Notification.permission === "denied") {
+      notificationsEnabled = false;
+      alert("Notification permission is blocked in your browser settings.");
+    }
 
-  notifyBtn.classList.toggle("active", notificationsEnabled);
-  notifyBtn.textContent = notificationsEnabled
-    ? "Notifications Enabled"
-    : "Notify me when server is up";
-});
+    notifyBtn.classList.toggle("active", notificationsEnabled);
+    notifyBtn.textContent = notificationsEnabled
+      ? "Notifications Enabled"
+      : "Notify me when server is up";
+  });
+}
 
 // Initial load and periodic refresh for live dashboard behavior.
 fetchStatus();
