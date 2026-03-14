@@ -233,6 +233,91 @@ tr:last-child td {
   border-bottom: none;
 }
 
+.github-star-wrap {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 20;
+}
+
+.github-star-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+  background: rgba(15, 26, 43, 0.9);
+  border: 1px solid rgba(125, 168, 255, 0.18);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.github-star-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(94, 153, 255, 0.42);
+  box-shadow: 0 14px 30px rgba(22, 70, 130, 0.28);
+}
+
+.github-star-icon {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, rgba(44, 115, 255, 0.28), rgba(27, 55, 112, 0.24));
+  border: 1px solid rgba(87, 143, 255, 0.22);
+}
+
+.github-star-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: #ffd54f;
+}
+
+.github-star-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #07203b;
+  background: #63a4ff;
+}
+
+.github-star-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.github-star-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #f5f8ff;
+}
+
+.github-star-subtitle {
+  font-size: 0.76rem;
+  color: #aabddf;
+}
+
+.github-star-arrow {
+  margin-left: auto;
+  color: #dfe9ff;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
 @keyframes livePulse {
   0% {
     opacity: 0.7;
@@ -251,6 +336,7 @@ tr:last-child td {
 @media (max-width: 600px) {
   .dashboard {
     padding: 16px;
+    margin-bottom: 92px;
   }
 
   .brand-logo {
@@ -272,5 +358,17 @@ tr:last-child td {
     width: 76px;
     height: 76px;
     margin-top: -110px;
+  }
+
+  .github-star-wrap {
+    right: 12px;
+    left: 12px;
+    bottom: 12px;
+  }
+
+  .github-star-button {
+    min-width: 0;
+    width: 100%;
+    padding: 11px 12px;
   }
 }
