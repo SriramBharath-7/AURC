@@ -77,7 +77,7 @@ async function notifyIfNeeded(currentStatus) {
   playUpBeep();
 
   if ("Notification" in window && Notification.permission === "granted") {
-    new Notification("Anna University Results", {
+    new Notification("AURC", {
       body: "Server is UP now. You can check your results.",
       icon: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f7e2.png"
     });

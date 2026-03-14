@@ -48,6 +48,22 @@ body {
   color: var(--muted);
 }
 
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo {
+  width: 62px;
+  height: 62px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
 .status-card {
   margin-top: 18px;
   background: rgba(6, 18, 35, 0.7);
@@ -201,6 +217,12 @@ tr:last-child td {
 @media (max-width: 600px) {
   .dashboard {
     padding: 16px;
+  }
+
+  .brand-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
   }
 
   .status-card {

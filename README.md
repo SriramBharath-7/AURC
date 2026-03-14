@@ -1,4 +1,4 @@
-# Anna University Results Monitor
+# AURC
 
 A lightweight web app that monitors the availability of Anna University COE results endpoints and shows the current status on a live dashboard.
 
