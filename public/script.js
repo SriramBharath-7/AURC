@@ -7,6 +7,11 @@ const checksTable = document.getElementById("checksTable");
 const notifyBtn = document.getElementById("notifyBtn");
 const resultLinks = document.getElementById("resultLinks");
 
+const MONITORED_URLS = [
+  "https://coe.annauniv.edu/home/index.php",
+  "https://coe.annauniv.edu/home/"
+];
+
 let previousStatus = null;
 let notificationsEnabled = false;
 
@@ -108,7 +113,8 @@ function updateUi(payload) {
   statusLabel.textContent = `${view.emoji} ${view.label}`;
   statusReason.textContent = payload.reason || "No details";
   lastChecked.textContent = formatTime(payload.checkedAt);
-  avgResponse.textContent = payload.averageResponseMs ? `${payload.averageResponseMs} ms` : "-";
+  const hasAvg = Number.isFinite(payload.averageResponseMs);
+  avgResponse.textContent = hasAvg ? `${payload.averageResponseMs} ms` : "N/A";
 
   // Show quick links only when the target server is currently reachable.
   resultLinks.classList.toggle("hidden", payload.status !== "UP");
@@ -119,6 +125,17 @@ function updateUi(payload) {
 async function fetchStatus() {
   try {
     const response = await fetch("/api/status", { cache: "no-store" });
+    const contentType = response.headers.get("content-type") || "";
+    const isJson = contentType.includes("application/json");
+
+    if (!response.ok) {
+      throw new Error(`API returned ${response.status}`);
+    }
+
+    if (!isJson) {
+      throw new Error("API returned non-JSON response");
+    }
+
     const payload = await response.json();
 
     updateUi(payload);
@@ -128,10 +145,15 @@ async function fetchStatus() {
   } catch (error) {
     updateUi({
       status: "DOWN",
-      reason: "Could not reach monitor backend",
+      reason: `Could not reach monitor backend (${error.message})`,
       checkedAt: new Date().toISOString(),
       averageResponseMs: null,
-      checks: []
+      checks: MONITORED_URLS.map((url) => ({
+        url,
+        statusCode: null,
+        error: "backend_unreachable",
+        durationMs: 0
+      }))
     });
   }
 }

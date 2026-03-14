@@ -128,8 +128,26 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 // Status API consumed by the dashboard.
 // On Vercel, run one live check per request because serverless functions are not always-on.
 app.get("/api/status", async (req, res) => {
-  await runCheck();
-  res.json(monitorState);
+  try {
+    await runCheck();
+    res.json(monitorState);
+  } catch (error) {
+    // Keep API response shape stable so frontend can always render diagnostics.
+    res.status(200).json({
+      status: "DOWN",
+      reason: `Monitor error: ${error.message}`,
+      checkedAt: new Date().toISOString(),
+      previousStatus: monitorState.status,
+      averageResponseMs: null,
+      checks: TARGETS.map((url) => ({
+        url,
+        ok: false,
+        statusCode: null,
+        durationMs: 0,
+        error: "monitor_error"
+      }))
+    });
+  }
 });
 
 /**
