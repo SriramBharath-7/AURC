@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anna University Results Monitor</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="dashboard">
+      <header class="dashboard-header">
+        <h1>Anna University Results Monitor</h1>
+        <p>Live availability check for COE results site</p>
+      </header>
+
+      <section class="status-card">
+        <div class="pulse-ring" aria-hidden="true"></div>
+        <div id="statusDot" class="status-dot status-unknown"></div>
+        <h2 id="statusLabel">Checking...</h2>
+        <p id="statusReason" class="status-reason">Please wait while we contact the server.</p>
+      </section>
+
+      <section class="meta-grid">
+        <article class="meta-item">
+          <h3>Last checked at</h3>
+          <p id="lastChecked">-</p>
+        </article>
+        <article class="meta-item">
+          <h3>Average response</h3>
+          <p id="avgResponse">-</p>
+        </article>
+      </section>
+
+      <section class="controls">
+        <button id="notifyBtn" class="notify-btn" type="button">Notify me when server is up</button>
+        <small id="notifyHint">Browser notifications are optional and can be enabled anytime.</small>
+      </section>
+
+      <section>
+        <h3 class="table-title">Endpoint Checks</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>Code / Error</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="checksTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

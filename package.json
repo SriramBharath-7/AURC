@@ -1,0 +1,20 @@
+{
+  "name": "anna-results-monitor",
+  "version": "1.0.0",
+  "description": "Simple dashboard to monitor Anna University results website availability",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "keywords": [
+    "monitor",
+    "status-dashboard",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
