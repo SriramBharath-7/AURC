@@ -5,6 +5,7 @@ const lastChecked = document.getElementById("lastChecked");
 const avgResponse = document.getElementById("avgResponse");
 const checksTable = document.getElementById("checksTable");
 const notifyBtn = document.getElementById("notifyBtn");
+const resultLinks = document.getElementById("resultLinks");
 
 let previousStatus = null;
 let notificationsEnabled = false;
@@ -108,6 +109,9 @@ function updateUi(payload) {
   statusReason.textContent = payload.reason || "No details";
   lastChecked.textContent = formatTime(payload.checkedAt);
   avgResponse.textContent = payload.averageResponseMs ? `${payload.averageResponseMs} ms` : "-";
+
+  // Show quick links only when the target server is currently reachable.
+  resultLinks.classList.toggle("hidden", payload.status !== "UP");
 
   renderChecks(payload.checks || []);
 }
